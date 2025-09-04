@@ -1,0 +1,8 @@
+---
+- name: Configure a local demo app
+  hosts: localhost
+  connection: local
+
+  roles:
+    - myapp
+

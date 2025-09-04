@@ -1,0 +1,22 @@
+# Managed by Ansible — do not edit manually.
+
+{% if listen_port != 80 %}
+Listen {{ listen_port }}
+{% endif %}
+
+<VirtualHost *:{{ listen_port }}>
+    ServerName {{ server_name }}
+    ServerAdmin {{ server_admin_email }}
+
+    DocumentRoot {{ doc_root }}
+
+    ErrorLog  {{ log_dir }}/{{ app_name | lower }}_error.log
+    CustomLog {{ log_dir }}/{{ app_name | lower }}_access.log combined
+
+    <Directory "{{ doc_root }}">
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Require all granted
+    </Directory>
+</VirtualHost>
+

@@ -1,0 +1,48 @@
+---
+- name: Install Apache
+  ansible.builtin.package:
+    name: "{{ httpd_package }}"
+    state: present
+
+- name: Ensure document root exists
+  ansible.builtin.file:
+    path: "{{ doc_root }}"
+    state: directory
+    owner: apache
+    group: apache
+    mode: "0755"
+
+- name: Deploy virtual host configuration
+  ansible.builtin.template:
+    src: "vhost.conf.j2"
+    dest: "/etc/httpd/conf.d/{{ vhost_filename }}"
+    mode: "0644"
+  notify: restart apache
+
+- name: Deploy application index page
+  ansible.builtin.template:
+    src: "index.html.j2"
+    dest: "{{ doc_root }}/index.html"
+    owner: apache
+    group: apache
+    mode: "0644"
+  notify: reload apache
+
+- name: Disable default welcome page (if present)
+  ansible.builtin.file:
+    path: "/etc/httpd/conf.d/welcome.conf"
+    state: absent
+  when: disable_welcome_conf
+
+- name: Ensure Apache is enabled and running
+  ansible.builtin.service:
+    name: "{{ httpd_service }}"
+    state: started
+    enabled: true
+
+- name: Show where to browse
+  ansible.builtin.debug:
+    msg:
+      - "DocumentRoot: http://{{ server_name }}:{{ listen_port }}/"
+      - "Conf file: /etc/httpd/conf.d/{{ vhost_filename }}"
+

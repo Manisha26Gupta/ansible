@@ -1,0 +1,2 @@
+server_admin_email: "admin@example.local"
+log_dir: "/var/log/httpd"

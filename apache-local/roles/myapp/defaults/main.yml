@@ -1,0 +1,17 @@
+---
+httpd_package: httpd
+httpd_service: httpd
+
+# Basic site settings
+app_name: "MyApp"
+env: "dev"
+server_name: "localhost"
+listen_port: 80
+
+# File paths
+doc_root: "/var/www/myapp"
+vhost_filename: "myapp.conf"
+
+# Behavior toggles
+disable_welcome_conf: true
+
